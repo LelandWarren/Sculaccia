@@ -1,0 +1,8 @@
+#no copilot-instructoins.md
+copilot-instructions.md
+
+#ignore sample folder
+sample
+
+#remove node modules
+node_modules
