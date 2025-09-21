@@ -22,7 +22,9 @@ export default {
       currentPhrase: '',
       showPhrase: false,
       heroEmoji: UI_TEXT.heroEmoji,
-      UI_TEXT
+      UI_TEXT,
+      phraseProgress: 100,
+      phraseTimer: null as number | null
     }
   },
 
@@ -39,14 +41,33 @@ export default {
 
     // Handle phrase display from NicePhrase button
     handlePhraseShown(phrase: string): void {
+      // Clear any existing timer
+      if (this.phraseTimer) {
+        clearInterval(this.phraseTimer)
+      }
+
       this.currentPhrase = phrase
       this.showPhrase = true
-      
-      // Hide phrase after 2.4 seconds (same as HTML)
-      setTimeout(() => {
-        this.showPhrase = false
-        this.currentPhrase = ''
-      }, 2400)
+      this.phraseProgress = 100
+
+      // Animate progress decay over 5 seconds
+      const duration = 5000 // 5 seconds
+      const interval = 50 // Update every 50ms for smooth animation
+      const decrement = (100 / duration) * interval
+
+      this.phraseTimer = setInterval(() => {
+        this.phraseProgress -= decrement
+        
+        if (this.phraseProgress <= 0) {
+          this.phraseProgress = 0
+          this.showPhrase = false
+          this.currentPhrase = ''
+          if (this.phraseTimer) {
+            clearInterval(this.phraseTimer)
+            this.phraseTimer = null
+          }
+        }
+      }, interval)
     },
 
     // Handle reset action
@@ -68,6 +89,13 @@ export default {
           easing: 'cubic-bezier(.2,.8,.2,1)' 
         })
       }
+    }
+  },
+
+  beforeUnmount() {
+    // Clean up timer when component is destroyed
+    if (this.phraseTimer) {
+      clearInterval(this.phraseTimer)
     }
   }
 }
@@ -97,13 +125,40 @@ export default {
         <ResetButton @reset="handleReset" />
       </div>
 
-      <!-- Nice Phrase Display -->
+      <!-- Nice Phrase Display with Timer -->
       <div 
         v-if="showPhrase" 
         role="status"
-        style="text-align: center; margin-top: 10px; font-weight: 800;"
+        class="phrase-container"
       >
-        {{ currentPhrase }}
+        <div class="phrase-timer">
+          <svg class="progress-ring" width="24" height="24" viewBox="0 0 24 24">
+            <circle
+              class="progress-ring-background"
+              cx="12"
+              cy="12"
+              r="10"
+              fill="transparent"
+              stroke="#e5e7eb"
+              stroke-width="2"
+            />
+            <circle
+              class="progress-ring-progress"
+              cx="12"
+              cy="12"
+              r="10"
+              fill="transparent"
+              stroke="#ff6b6b"
+              stroke-width="2"
+              :stroke-dasharray="62.83"
+              :stroke-dashoffset="62.83 - (62.83 * phraseProgress / 100)"
+              transform="rotate(-90 12 12)"
+            />
+          </svg>
+        </div>
+        <div class="phrase-text">
+          {{ currentPhrase }}
+        </div>
       </div>
 
       <!-- Footer -->
@@ -116,5 +171,53 @@ export default {
 </template>
 
 <style scoped>
-/* All styles are in global styles.css */
+.phrase-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.phrase-timer {
+  flex-shrink: 0;
+}
+
+.progress-ring {
+  transform: rotate(0deg);
+  transition: none;
+}
+
+.progress-ring-progress {
+  transition: stroke-dashoffset 50ms linear;
+}
+
+.phrase-text {
+  font-weight: 800;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .phrase-container {
+    gap: 8px;
+    padding: 6px 12px;
+    margin: 10px 8px 0;
+  }
+  
+  .progress-ring {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .phrase-text {
+    font-size: 14px;
+  }
+}
 </style>
