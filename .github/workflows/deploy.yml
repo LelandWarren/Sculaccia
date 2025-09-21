@@ -37,7 +37,7 @@ jobs:
         working-directory: ./Sculaccia
         
       - name: Build
-        run: npm run build
+        run: NODE_ENV=production npm run build
         working-directory: ./Sculaccia
         
       - name: Upload artifact
