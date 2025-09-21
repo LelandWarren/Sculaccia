@@ -24,17 +24,17 @@ export const phrases = [
 ]
 
 // Emojis for the confetti burst
-export const BURST_EMOJIS = ['🍑', '✨', '💥', '🎉', '💖', '😄', '🥳', '👏', '🌟', '💫']
+export const BURST_EMOJIS = ['🇮🇹', '🍕', '🍑', '✨', '💥', '🎉', '💖', '😄', '🥳', '👏', '🌟', '💫']
 
 // UI Text constants
 export const UI_TEXT = {
   title: 'Sculaccia!',
-  subtitle: 'Premi il bottone per dare una <strong>sculacciata</strong>. È solo per ridere — mamma-friendly 😇',
+  subtitle: 'Premi il bottone per dare una <strong>sculacciata</strong>. È solo per ridere (mamma-friendly) 😇',
   mainButton: 'Dai una sculacciata',
   mainButtonSubtext: '(vibra + emoji + suono)',
   niceButton: 'Dimmi qualcosa di carino',
   resetButton: 'Resetta oggi',
-  footer: 'Suggerimenti: aggiungi alla Home sul telefono per un accesso rapido. Niente dati raccolti, tutto resta sul tuo dispositivo.',
+  footer: 'Suggerimenti: aggiungi questo link ai preferiti sul tuo telefono o da qualche altra parte perché non posso trasformarlo in un app vera e propria',
   heroEmoji: '✋🍑',
   countSingle: 'sculacciata',
   countPlural: 'sculacciate',
